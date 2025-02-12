@@ -101,13 +101,14 @@ query ($id: ID!) {
 
 ```graphql
 # Get a page of feedback records
+# When call getFeedbackPage from Store
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
     id
     text
   }
 }
-
+# When call getFeedbackPage from Service
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
     values {
@@ -124,3 +125,38 @@ query ($page: Int!, $per_page: Int!) {
  "per_page": 10
  }
 ```
+
+
+# Test feedback with highlight
+query ($id: ID!) {
+  feedback(id: $id) {
+    id
+    text
+    highlights {
+      id
+      quote
+      summary
+    }
+  }
+}
+
+{
+  "id": 1
+}
+
+query ($page: Int!, $per_page: Int!) {
+  feedbacks(page: $page, per_page: $per_page) {
+    id
+    text
+    highlights {
+      id
+      quote
+      summary
+    }
+  }
+}
+
+ {
+ "page": 1,
+ "per_page": 10
+ }

@@ -26,7 +26,7 @@ const getFeedbackPage = async (page: number, perPage: number): Promise<Feedback[
   const values = db.prepare(`SELECT id, text
                              FROM Feedback
                              ORDER BY id DESC
-                             LIMIT ? OFFSET ?`).all(perPage, (page - 1) * perPage) as Feedback[];;
+                             LIMIT ? OFFSET ?`).all(perPage, (page - 1) * perPage) as Feedback[];
   return values;
 };
 
