@@ -79,9 +79,9 @@ mutation ($text: String!) {
 }
 
 # Variables
-#  {
-#  "text": "Would be cool to have a \"merge\" option potentially? This issue and request are sort of related, and actually sourced from the same Slack message. Would be cool to merge them back into one."
-#  }
+  {
+  "text": "Would be cool to have a \"merge\" option potentially? This issue and request are sort of related, and actually sourced from the same Slack message. Would be cool to merge them back into one."
+  }
 ```
 
 ```graphql
@@ -94,9 +94,9 @@ query ($id: ID!) {
 }
 
 # Variables
-#  {
-#  "id": "1"
-#  }
+  {
+  "id": "1"
+  }
 ```
 
 ```graphql
@@ -108,9 +108,19 @@ query ($page: Int!, $per_page: Int!) {
   }
 }
 
+query ($page: Int!, $per_page: Int!) {
+  feedbacks(page: $page, per_page: $per_page) {
+    values {
+      id
+      text
+    }
+    count
+  }
+}
+
 # Variables
-#  {
-#  "page": 1,
-#  "per_page": 10
-#  }
+ {
+ "page": 1,
+ "per_page": 10
+ }
 ```

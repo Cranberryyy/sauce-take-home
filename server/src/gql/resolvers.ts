@@ -1,5 +1,6 @@
 import feedbackStore from "../store/feedback";
 import feeedbackService from "../service/feedback";
+import { Feedback } from "../store/model";
 
 /**
  * GraphQL Resolvers
@@ -10,7 +11,7 @@ const resolvers = {
       return feedbackStore.getFeedback(args.id)
     },
     feedbacks: (parent: unknown, args: { page: number; per_page: number }) => {
-      return feeedbackService.getFeedbackPage(args.page, args.per_page)
+      return feedbackStore.getFeedbackPage(args.page, args.per_page); 
     },
   },
   Mutation: {
@@ -19,8 +20,8 @@ const resolvers = {
     }
   },
   Feedback: {
-    highlights: () => {
-      return []
+    highlights: (parent: Feedback) => {
+      return feedbackStore.getFeedbackHighlights(parent.id)
     }
   }
 };

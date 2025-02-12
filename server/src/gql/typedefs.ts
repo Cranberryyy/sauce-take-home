@@ -2,8 +2,10 @@
  * GraphQL type definitions
  */
 const typeDefs = /* GraphQL */ `
+  scalar ID
+
   type Query {
-    feedback(id: Int!): Feedback
+    feedback(id: ID!): Feedback
     feedbacks(page: Int!, per_page: Int!): FeedbackPage!
   }
   
@@ -12,13 +14,13 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Feedback {
-    id: Int!
+    id: ID!
     text: String!
     highlights: [Highlight!]
   }
 
   type Highlight {
-    id: Int!
+    id: ID!
     quote: String!
     summary: String!
   }
