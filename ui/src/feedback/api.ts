@@ -1,25 +1,48 @@
-import {gql, request} from "graphql-request";
+import { gql, request } from "graphql-request";
 
 export type Feedback = {
-  id: number
-  text: string
-}
+  id: number;
+  text: string;
+  highlights?: {
+    id: number;
+    quote: string;
+    summary: string;
+  }[];
+};
 
-const feedbacksDocument = gql`
-  query feedbacks($page: Int!, $per_page: Int!) {
-    feedbacks(page: $page, per_page: $per_page) {
-      values {
-        id
-        text
-      }
-      count
+const feedbacksAndHighlightDocument = gql`
+query ($page: Int!, $per_page: Int!) {
+  feedbacks(page: $page, per_page: $per_page) {
+    id
+    text
+    highlights {
+      id
+      quote
+      summary
     }
   }
-`
+}
+`;
 
-type FeedbacksData = { feedbacks: { values: Feedback[], count: number } }
-export const feedbacksQuery = (page: number, per_page: number): Promise<FeedbacksData> =>
-  request('http://localhost:4000/graphql', feedbacksDocument, {
+const feedbacksDocument = gql`
+query ($page: Int!, $per_page: Int!) {
+  feedbacks(page: $page, per_page: $per_page) {
+      id
+      text
+  }
+}
+`;
+
+type FeedbacksAndHighlightsData = { feedbacks: { values: Feedback[]; count: number } };
+export const feedbacksAndHighlightsQuery = (page: number, per_page: number): Promise<FeedbacksAndHighlightsData> =>
+  request("http://localhost:4000/graphql", feedbacksAndHighlightDocument, {
     page,
-    per_page
-  })
+    per_page,
+  });
+
+type FeedbacksData = { feedbacks: { values: Feedback[]; count: number } };
+export const feedbacksQuery = (page: number, per_page: number): Promise<FeedbacksData> =>
+  request("http://localhost:4000/graphql", feedbacksDocument, {
+    page,
+    per_page,
+  });
