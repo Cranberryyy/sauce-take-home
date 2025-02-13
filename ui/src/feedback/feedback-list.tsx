@@ -2,21 +2,25 @@ import { useEffect, useState } from "react";
 import { Feedback, feedbacksQuery, feedbacksAndHighlightsQuery } from "./api.ts";
 
 export default function FeedbackList() {
-  const [page, setPage] = useState(1);
+  const [feedbackPage, setFeedbackPage] = useState(1);
+  const [highlightPage, setHighlightPage] = useState(1);
+  const [feedbackTotalPages, setFeedbackTotalPages] = useState(1);
+  const [highlightTotalPages, setHighlightTotalPages] = useState(1);
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [feedbacksWithHighlights, setFeedbacksWithHighlights] = useState<Feedback[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const PER_PAGE = 5; // Number of feedback items per page
 
   useEffect(() => {
-    setError(null); // Reset errors when page changes
-  
+    setError(null);
+
     // Fetch feedbacks
-    feedbacksQuery(page, 10)
+    feedbacksQuery(feedbackPage, PER_PAGE)
       .then((result) => {
         console.log("✅ Feedbacks API response:", result);
-  
         if (Array.isArray(result?.feedbacks)) {
-          setFeedbacks(result.feedbacks); // Use feedbacks directly, NOT feedbacks.values
+          setFeedbacks(result.feedbacks);
+          setFeedbackTotalPages(Math.ceil(result.totalCount / PER_PAGE));
         } else {
           console.error("⚠️ Unexpected feedbacks API structure:", result);
           setError("Unexpected response structure from feedbacks API.");
@@ -26,14 +30,18 @@ export default function FeedbackList() {
         console.error("❌ Failed to fetch feedbacks:", err);
         setError("Failed to fetch feedbacks from the backend.");
       });
-  
+  }, [feedbackPage]);
+
+  useEffect(() => {
+    setError(null);
+
     // Fetch feedbacks with highlights
-    feedbacksAndHighlightsQuery(page, 10)
+    feedbacksAndHighlightsQuery(highlightPage, PER_PAGE)
       .then((result) => {
         console.log("✅ Feedbacks with Highlights API response:", result);
-  
         if (Array.isArray(result?.feedbacks)) {
-          setFeedbacksWithHighlights(result.feedbacks); // Use feedbacks directly
+          setFeedbacksWithHighlights(result.feedbacks);
+          setHighlightTotalPages(Math.ceil(result.totalCount / PER_PAGE));
         } else {
           console.error("⚠️ Unexpected feedbacksWithHighlights API structure:", result);
           setError("Unexpected response structure from feedbacksWithHighlights API.");
@@ -43,8 +51,7 @@ export default function FeedbackList() {
         console.error("❌ Failed to fetch feedbacks with highlights:", err);
         setError("Failed to fetch feedbacks with highlights from the backend.");
       });
-  }, [page]);
-  
+  }, [highlightPage]);
 
   return (
     <div className="space-y-4">
@@ -62,6 +69,25 @@ export default function FeedbackList() {
         ))
       )}
 
+      {/* Pagination Controls for Feedback */}
+      <div className="flex justify-center space-x-4 mt-4">
+        <button
+          onClick={() => setFeedbackPage((prev) => Math.max(prev - 1, 1))}
+          disabled={feedbackPage === 1}
+          className={`px-4 py-2 rounded-lg ${feedbackPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
+        >
+          Previous
+        </button>
+        <span className="text-white">Page {feedbackPage} of {feedbackTotalPages}</span>
+        <button
+          onClick={() => setFeedbackPage((prev) => prev + 1)}
+          disabled={feedbackPage >= feedbackTotalPages}
+          className={`px-4 py-2 rounded-lg ${feedbackPage >= feedbackTotalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
+        >
+          Next
+        </button>
+      </div>
+
       <h1 className="text-2xl font-semibold">Feedback with Highlights</h1>
 
       {feedbacksWithHighlights.length === 0 && !error ? (
@@ -71,7 +97,7 @@ export default function FeedbackList() {
           <div key={feedback.id} className="bg-slate-700 bg-opacity-20 hover:bg-opacity-30 cursor-pointer rounded-lg py-2 px-4 text-left">
             <p className="text-red-300"><strong>ID:</strong> {feedback.id}</p>
             <p className="text-white"><strong>Text:</strong> {feedback.text}</p>
-            <p className="text-white"><strong>HighLights:</strong></p>
+            <p className="text-white"><strong>Highlights:</strong></p>
             {feedback.highlights?.map((highlight) => (
               <div key={highlight.id} className="ml-4 mt-2">
                 <blockquote className="italic text-blue-300">"{highlight.quote}"</blockquote>
@@ -81,6 +107,25 @@ export default function FeedbackList() {
           </div>
         ))
       )}
+
+      {/* Pagination Controls for Feedback with Highlights */}
+      <div className="flex justify-center space-x-4 mt-4">
+        <button
+          onClick={() => setHighlightPage((prev) => Math.max(prev - 1, 1))}
+          disabled={highlightPage === 1}
+          className={`px-4 py-2 rounded-lg ${highlightPage === 1 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
+        >
+          Previous
+        </button>
+        <span className="text-white">Page {highlightPage} of {highlightTotalPages}</span>
+        <button
+          onClick={() => setHighlightPage((prev) => prev + 1)}
+          disabled={highlightPage >= highlightTotalPages}
+          className={`px-4 py-2 rounded-lg ${highlightPage >= highlightTotalPages ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
