@@ -9,53 +9,54 @@ export default function FeedbackList() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [feedbacksWithHighlights, setFeedbacksWithHighlights] = useState<Feedback[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const PER_PAGE = 5; // Number of feedback items per page
+  const PER_PAGE = 2; // Number of feedback items per page
 
-  useEffect(() => {
-    setError(null);
+  // useEffect(() => {
+  //   setError(null);
 
-    // Fetch feedbacks
-    feedbacksQuery(feedbackPage, PER_PAGE)
-      .then((result) => {
-        console.log("✅ Feedbacks API response:", result);
-        if (Array.isArray(result?.feedbacks)) {
-          setFeedbacks(result.feedbacks);
-          setFeedbackTotalPages(Math.ceil(result.totalCount / PER_PAGE));
-        } else {
-          console.error("⚠️ Unexpected feedbacks API structure:", result);
-          setError("Unexpected response structure from feedbacks API.");
-        }
-      })
-      .catch((err) => {
-        console.error("❌ Failed to fetch feedbacks:", err);
-        setError("Failed to fetch feedbacks from the backend.");
-      });
-  }, [feedbackPage]);
+  //   // Fetch feedbacks
+  //   feedbacksQuery(feedbackPage, PER_PAGE)
+  //     .then((result) => {
+  //       console.log("✅ Feedbacks API response:", result);
+  //       if (Array.isArray(result?.feedbacks.values)) {
+  //         setFeedbacks(result.feedbacks.values);
+  //         setFeedbackTotalPages(Math.ceil(result.feedbacks.count / PER_PAGE));
+  //       } else {
+  //         console.error("⚠️ Unexpected feedbacks API structure:", result);
+  //         setError("Unexpected response structure from feedbacks API.");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("❌ Failed to fetch feedbacks:", err);
+  //       setError("Failed to fetch feedbacks from the backend.");
+  //     });
+  // }, [feedbackPage]);
 
   useEffect(() => {
     setError(null);
 
     // Fetch feedbacks with highlights
     feedbacksAndHighlightsQuery(highlightPage, PER_PAGE)
-      .then((result) => {
-        console.log("✅ Feedbacks with Highlights API response:", result);
-        if (Array.isArray(result?.feedbacks)) {
-          setFeedbacksWithHighlights(result.feedbacks);
-          setHighlightTotalPages(Math.ceil(result.totalCount / PER_PAGE));
-        } else {
-          console.error("⚠️ Unexpected feedbacksWithHighlights API structure:", result);
-          setError("Unexpected response structure from feedbacksWithHighlights API.");
-        }
-      })
-      .catch((err) => {
-        console.error("❌ Failed to fetch feedbacks with highlights:", err);
-        setError("Failed to fetch feedbacks with highlights from the backend.");
-      });
+    .then((result) => {
+      console.log("✅ Feedbacks with Highlights API response:", result);
+      if (Array.isArray(result?.feedbacks.values)) { // Change here
+        setFeedbacksWithHighlights(result.feedbacks.values);
+        setHighlightTotalPages(Math.ceil(result.feedbacks.count / PER_PAGE)); 
+      } else {
+        console.error("⚠️ Unexpected feedbacksWithHighlights API structure:", result);
+        setError("Unexpected response structure from feedbacksWithHighlights API.");
+      }
+    })
+    .catch((err) => {
+      console.error("❌ Failed to fetch feedbacks with highlights:", err);
+      setError("Failed to fetch feedbacks with highlights from the backend.");
+    });
+  
   }, [highlightPage]);
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Feedback</h1>
+      {/* <h1 className="text-2xl font-semibold">Feedback</h1>
       {error && <p className="text-red-500">⚠️ {error}</p>}
 
       {feedbacks.length === 0 && !error ? (
@@ -67,10 +68,9 @@ export default function FeedbackList() {
             <p className="text-white"><strong>Text:</strong> {feedback.text}</p>
           </div>
         ))
-      )}
+      )} */}
 
-      {/* Pagination Controls for Feedback */}
-      <div className="flex justify-center space-x-4 mt-4">
+      {/* <div className="flex justify-center space-x-4 mt-4">
         <button
           onClick={() => setFeedbackPage((prev) => Math.max(prev - 1, 1))}
           disabled={feedbackPage === 1}
@@ -86,7 +86,7 @@ export default function FeedbackList() {
         >
           Next
         </button>
-      </div>
+      </div> */}
 
       <h1 className="text-2xl font-semibold">Feedback with Highlights</h1>
 

@@ -22,12 +22,16 @@ const getFeedback = async (id: number): Promise<Feedback> => {
  * @param page The page number
  * @param perPage The number of entries per page
  */
-const getFeedbackPage = async (page: number, perPage: number): Promise<Feedback[]> => {
-  const values = db.prepare(`SELECT id, text
-                             FROM Feedback
-                             ORDER BY id DESC
-                             LIMIT ? OFFSET ?`).all(perPage, (page - 1) * perPage) as Feedback[];
-  return values;
+const getFeedbackPage = (page: number, perPage: number): { values: Feedback[], count: number } => {
+  // Get the total number of feedback entries
+  const count = (db.prepare(`SELECT COUNT(*) as count FROM Feedback`).get() as { count: number }).count;
+
+  // Fetch paginated feedback entries
+  const values = db.prepare(
+    `SELECT id, text FROM Feedback ORDER BY id DESC LIMIT ? OFFSET ?`
+  ).all(perPage, (page - 1) * perPage) as Feedback[];
+
+  return { values, count };
 };
 
 /**

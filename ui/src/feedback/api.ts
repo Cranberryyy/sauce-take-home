@@ -13,13 +13,16 @@ export type Feedback = {
 const feedbacksAndHighlightDocument = gql`
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
-    id
-    text
-    highlights {
+    values {
       id
-      quote
-      summary
+      text
+      highlights {
+        id
+        quote
+        summary
+      }
     }
+    count
   }
 }
 `;
@@ -27,8 +30,11 @@ query ($page: Int!, $per_page: Int!) {
 const feedbacksDocument = gql`
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
+    values {
       id
       text
+    }
+    count
   }
 }
 `;
