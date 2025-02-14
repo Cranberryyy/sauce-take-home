@@ -1,23 +1,22 @@
 # Sauce Technical Task
 
-
 ## The Project
 This repository is a simplified and partial implementation of Sauce.
 
 The project consists of a GraphQL server that exposes some queries and mutations to create and fetch feedback records.
-A feedback record is simply some text with some form of product feedback. \
+A feedback record is simply some text with some form of product feedback.  
 e.g. "The UI is too cluttered, I can't find the settings page." would be a feedback record explaining an issue someone is facing with a product.
 
 The UI is a simple React application that renders a list of feedback records.
 
 ## The Task
-Make changes in order to implement the following: \
-\
-**- Persist the generated highlights in the db (SQLite)** \
-**- Display the highlights along with the parent feedback in the rendered list** \
+Make changes in order to implement the following:  
+
+**- Persist the generated highlights in the db (SQLite)**  
+**- Display the highlights along with the parent feedback in the rendered list**  
 **- Add pagination to the rendered feedback list**
 
-**Bonus** \
+**Bonus**  
 **- Allow bulk creation without having the API waiting for highlight creation**
 
 ## Structure
@@ -60,7 +59,7 @@ cd server && npm install && npm run dev
 cd ui && npm install && npm run dev
 ```
 
-# API
+## API
 
 You can access the GraphQL playground at
 [http://localhost:4000/graphql](http://localhost:4000/graphql)
@@ -79,9 +78,9 @@ mutation ($text: String!) {
 }
 
 # Variables
-  {
+{
   "text": "Would be cool to have a \"merge\" option potentially? This issue and request are sort of related, and actually sourced from the same Slack message. Would be cool to merge them back into one."
-  }
+}
 ```
 
 ```graphql
@@ -94,14 +93,14 @@ query ($id: ID!) {
 }
 
 # Variables
-  {
+{
   "id": "1"
-  }
+}
 ```
 
 ```graphql
 # Get a page of feedback records
-# When call getFeedbackPage from Store
+# When call getFeedbackPage from Store, has been modified to return count
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
     id
@@ -120,13 +119,13 @@ query ($page: Int!, $per_page: Int!) {
 }
 
 # Variables
- {
- "page": 1,
- "per_page": 10
- }
+{
+  "page": 1,
+  "per_page": 10
+}
 ```
 
-
+```graphql
 # Test feedback with highlight
 query ($id: ID!) {
   feedback(id: $id) {
@@ -140,23 +139,29 @@ query ($id: ID!) {
   }
 }
 
+# Variables
 {
   "id": 1
 }
 
 query ($page: Int!, $per_page: Int!) {
   feedbacks(page: $page, per_page: $per_page) {
-    id
-    text
-    highlights {
+    values {
       id
-      quote
-      summary
+      text
+      highlights {
+        id
+        quote
+        summary
+      }
     }
+    count
   }
 }
 
- {
- "page": 1,
- "per_page": 10
- }
+# Variables
+{
+  "page": 1,
+  "per_page": 10
+}
+```

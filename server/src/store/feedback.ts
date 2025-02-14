@@ -87,27 +87,3 @@ const createHighlight = async (args: CreateHighlightArgs): Promise<Highlight> =>
 
 export default {getFeedback, getFeedbackPage, createFeedback, createHighlight, getFeedbackHighlights};
 
-
-
-
-
-
-// /** Create the new feedback and highlight of the feedback */
-// /**
-//  * Creates a new feedback entry
-//  * @param text The text of the feedback
-//  * @param highlights The highlights of the feedback
-//  */
-// const createFeedback = async (text: string, highlights: CreateHighlightArgs[]) => {
-//   const result = db.prepare(`INSERT INTO Feedback (text) VALUES (?)`).run(text);
-//   const feedbackId = result.lastInsertRowid;
-
-//   // Save highlights to the database
-//   for (const highlight of highlights) {
-//     db.prepare(`INSERT INTO Highlight (quote, summary, feedbackId) VALUES (?, ?, ?)`)
-//       .run(highlight.highlightQuote, highlight.highlightSummary, feedbackId);
-//   }
-
-//   return { id: feedbackId, text }，highlights;
-// };
-// export default {getFeedback, getFeedbackPage, createFeedback};

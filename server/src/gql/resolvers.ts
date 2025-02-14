@@ -11,7 +11,7 @@ const resolvers = {
       return feedbackStore.getFeedback(args.id)
     },
     feedbacks: (parent: unknown, args: { page: number; per_page: number }) => {
-      return feedbackStore.getFeedbackPage(args.page, args.per_page); 
+      return feeedbackService.getFeedbackPage(args.page, args.per_page); 
     },
   },
   Mutation: {
