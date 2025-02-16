@@ -17,7 +17,10 @@ const resolvers = {
   Mutation: {
     createFeedback: (parent: unknown, args: { text: string }) => {
       return feeedbackService.createFeedback(args.text)
-    }
+    },
+    createFeedbacks: async (parent: unknown, args: { texts: string[] }) => {
+      return feeedbackService.createFeedbacks(args.texts);
+    },
   },
   Feedback: {
     highlights: (parent: Feedback) => {

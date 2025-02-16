@@ -21,7 +21,8 @@ const sqlSchema = `
 `;
 
 /**
- * Database instance
+ * Database instance, save in memeory, not on disk
+ * const db = new Database('path/to/your/database/file.db')
  */
 const db = new Database(":memory:");
 db.exec(sqlSchema);

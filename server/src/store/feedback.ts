@@ -23,14 +23,11 @@ const getFeedback = async (id: number): Promise<Feedback> => {
  * @param perPage The number of entries per page
  */
 const getFeedbackPage = (page: number, perPage: number): { values: Feedback[], count: number } => {
-  // Get the total number of feedback entries
+  // Get the total number of feedback entries for pagination
   const count = (db.prepare(`SELECT COUNT(*) as count FROM Feedback`).get() as { count: number }).count;
-
-  // Fetch paginated feedback entries
   const values = db.prepare(
     `SELECT id, text FROM Feedback ORDER BY id DESC LIMIT ? OFFSET ?`
   ).all(perPage, (page - 1) * perPage) as Feedback[];
-
   return { values, count };
 };
 
@@ -81,7 +78,6 @@ const createHighlight = async (args: CreateHighlightArgs): Promise<Highlight> =>
     summary: args.highlightSummary,
     quote: args.highlightQuote,
   };
-
   return highlight;
 }
 

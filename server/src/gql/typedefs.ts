@@ -11,6 +11,7 @@ const typeDefs = /* GraphQL */ `
   
   type Mutation {
     createFeedback(text: String!): Feedback!
+    createFeedbacks(texts: [String!]!): [Feedback!]!
   }
 
   type Feedback {

@@ -12,8 +12,10 @@
   "dependencies": {
     "@graphql-tools/schema": "^10.0.2",
     "better-sqlite3": "^9.4.3",
+    "bullmq": "^5.41.1",
     "graphql": "^16.8.1",
     "graphql-yoga": "^5.1.1",
+    "ioredis": "^5.5.0",
     "openai": "^4.28.0",
     "sqlite3": "^5.1.7",
     "uuid": "^9.0.1",
